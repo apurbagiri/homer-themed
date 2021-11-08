@@ -84,7 +84,7 @@ Finally, the **Homer Dashboard** page should be accessible under following URL:
 <br /><br />
 
 ### Build your custom docker image
-- Close this repo
+- Clone this repo
 - Modify <code>/theme/assets/config.yml</code> under this repo
 	- You can run this container first and modify <code>/docker/homer/www/assets/config.yml</code> within container
 	- Reload the dashboard to see if modification is to your liking (browser might cache old data, so clear cache if changes aren't reflected or simply use new incognito after each change)
