@@ -11,5 +11,9 @@ fi
 # Install default config if no one is available.
 yes n | cp -i /www/default-assets/config.yml.dist /www/assets/config.yml &> /dev/null
 
+# Copy theme files to homer
+cp /www/theme/assets/* /www/assets/
+cp /www/theme/assets/tools/* /www/assets/tools/
+
 chown -R $UID:$GID /www/assets
 exec su-exec $UID:$GID darkhttpd /www/ --no-listing --port "$PORT"

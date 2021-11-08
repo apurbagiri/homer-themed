@@ -1,137 +1,107 @@
 <h1 align="center">
- <img
-  width="180"
-  alt="Homer's donut"
-  src="https://raw.githubusercontent.com//bastienwirtz/homer/main/public/logo.png">
-    <br/>
-    Homer
+    homer-themed
 </h1>
 
 <h4 align="center">
- A dead simple static <strong>HOM</strong>epage for your serv<strong>ER</strong> to keep your services on hand, from a simple <code>yaml</code> configuration file.
+A simple static home page to access shortcut to all your home-lab services and can easily configurable with <code>yaml</code> file.
 </h4>
+<br />
+<br />
+<h2 align="center">Credits [100%]</h2>
+
+The complete codebase is based on work done under following two repos:-
+- [Homer Dashboard](https://github.com/bastienwirtz/homer)
+- [Homer Theme v2](https://github.com/walkxcode/homer-theme)
+
+I merely combined them to just simplify things for my personal use. All credit goes to them. </h4> 
+<br />
+<br />
+<h2 align="left">Summary of changes</h2>
+
+- Modified Dockerfile to build the docker image with pre-applied  [Homer Theme v2](https://github.com/walkxcode/homer-theme) on [Homer Dashboard](https://github.com/bastienwirtz/homer)
+- Added some commonly used icons and shortcuts
+
+<h2 align="left">Preview</h2>
 
 <p align="center">
- <strong>
-   <a href="https://homer-demo.netlify.app">Demo</a>
-  •
-  <a href="https://gitter.im/homer-dashboard/community">Chat</a>
-  •
-  <a href="#getting-started">Getting started</a>
- </strong>
+Dark Mode
+<img alt="Homer Theme" src="https://raw.githubusercontent.com/apurbagiri/homer-themed/main/preview-dark.png">
 </p>
 <p align="center">
- <a href="https://opensource.org/licenses/Apache-2.0"><img
-  alt="License: Apache 2"
-  src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"></a>
-  <a href="https://gitter.im/homer-dashboard/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img
-  alt="Gitter chat"
-  src="https://badges.gitter.im/homer-dashboard/community.svg"></a>
-  <a href="https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip"><img
-  alt="Download homer static build"
-  src="https://img.shields.io/badge/Download-homer.zip-orange"></a>
- <a href="https://github.com/awesome-selfhosted/awesome-selfhosted"><img
-  alt="Awesome"
-  src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg"></a>
+  Light Mode
+   <img alt="Homer Theme" src="https://raw.githubusercontent.com/apurbagiri/homer-themed/main/preview-light.png">
 </p>
+ 
 
-<p align="center">
- <img src="https://raw.github.com/bastienwirtz/homer/main/docs/screenshot.png" width="100%">
-</p>
-
-## Table of Contents
-
-- [Features](#features)
-- [Getting started](#getting-started)
-- [Configuration](docs/configuration.md)
-- [Custom services](docs/customservices.md)
-- [Tips & tricks](docs/tips-and-tricks.md)
-- [Development](docs/development.md)
-- [Troubleshooting](docs/troubleshooting.md)
-
+<br /><br />
 ## Features
+The application packs quite a few features. Instead of copying more stuff here, I would suggest going over to [bastienwirtz/homer](https://github.com/bastienwirtz/homer) and read all about it. 
 
-- [yaml](http://yaml.org/) file configuration
-- Installable (pwa)
-- Search
-- Grouping
-- Theme customization
-- Offline heath check
-- keyboard shortcuts:
-  - `/` Start searching.
-  - `Escape` Stop searching.
-  - `Enter` Open the first matching result (respects the bookmark's `_target` property).
-  - `Alt`/`Option` + `Enter` Open the first matching result in a new tab.
-
-## Getting started
-
-Homer is a full static html/js dashboard, generated from the source in `/src` using webpack. It's meant to be served by an HTTP server, **it will not work if you open dist/index.html directly over file:// protocol**.
-
-See [documentation](docs/configuration.md) for information about the configuration (`assets/config.yml`) options.
+<br /><br />
 
 ### Using docker
 
-To launch container:
-
-```sh
-docker run -d \
-  -p 8080:8080 \
-  -v </your/local/assets/>:/www/assets \
-  --restart=always \
-  b4bz/homer:latest
-```
-
-Default assets will be automatically installed in the `/www/assets` directory. Use `UID` and/or `GID` env var to change the assets owner (`docker run -e "UID=1000" -e "GID=1000" [...]`).
-
-### Using docker-compose
-
-The `docker-compose.yml` file must be edited to match your needs.
-Set the port and volume (equivalent to `-p` and `-v` arguments):
-
-```yaml
-volumes:
-  - /your/local/assets/:/www/assets
-ports:
-  - 8080:8080
-```
+Docker-hub location: [apurba/homer-themed](https://hub.docker.com/repository/docker/apurba/homer-themed )
 
 To launch container:
 
-```sh
-cd /path/to/docker-compose.yml
-docker-compose up -d
 ```
+docker run -d -p 8090:8080 -v </your/local/assets/>:/www/assets --restart=always apurba/homer-themed:latest
+```
+<br /><br />
 
-Default assets will be automatically installed in the `/www/assets` directory. Use `UID` and/or `GID` env var to change the assets owner, also in `docker-compose.yml`:
+### docker-compose
+
+Add the equivalent of following in `docker-compose.yml` 
 
 ```yaml
-environment:
-  - UID=1000
-  - GID=1000
+  homer:
+    image: "apurba/homer-themed:latest"
+    container_name: homer
+    environment:
+      - UID=${PUID}
+      - GID=${PGID}
+    volumes:
+      - ${USERDIR}/docker/homer/www/assets:/www/assets
+    ports:
+      - 8090:8080
+    restart: always
 ```
 
-### Using the release tarball (prebuilt, ready to use)
-
-Download and extract the latest release (`homer.zip`) from the [release page](https://github.com/bastienwirtz/homer/releases), rename the `assets/config.yml.dist` file to `assets/config.yml`, and put it behind a web server.
+To launch container:
 
 ```sh
-wget https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
-unzip homer.zip
-cd homer
-cp assets/config.yml.dist assets/config.yml
-npx serve # or python -m http.server 8010 or apache, nginx ...
+sudo docker-compose -f ~/docker/docker-compose.yml up -d
 ```
 
-### Build manually
+Please note that configurations above would require some changes based on your own server configuration, env variables and docker setup.
 
-```sh
-# Using yarn (recommended)
-yarn install
-yarn build
+<br /><br />
+Finally, the **Homer Dashboard** page should be accessible under following URL:
 
-# **OR** Using npm
-npm install
-npm run build
-```
+<code>http://<server-ip-address:8090></code>
 
-Then your dashboard is ready to use in the `/dist` directory.
+<br /><br />
+
+### Build your custom docker image
+- Close this repo
+- Modify <code>/theme/assets/config.yml</code> under this repo
+	- You can run this container first and modify <code>/docker/homer/www/assets/config.yml</code> within container
+	- Reload the dashboard to see if modification is to your liking (browser might cache old data, so clear cache if changes aren't reflected or simply use new incognito after each change)
+- Add/remove any logos necessary inside <code>/theme/assets/tools</code>
+- For advance configuration, visit [original author's](https://github.com/walkxcode) [configuration page](https://github.com/walkxcode/homer-theme/blob/main/docs/extra-configuration.md)
+- Run following docker command to build the new image:-
+
+	```sh
+	docker build . -t dockerid/container-name:versiontag
+	```
+
+<br /><br /><br />
+
+### LICENSE NOTICE
+
+- [Homer Dashboard](https://github.com/bastienwirtz/homer) is licensed under **Apache License 2.0** | Copyright 2018 Bastien Wirtz
+You may not use this file except in compliance with the License. You may obtain a copy of the License [here](https://github.com/apurbagiri/homer-themed/blob/main/HOMER-LICENSE)
+	
+- [Homer Theme v2](https://github.com/walkxcode/homer-theme) is licensed under **MIT License** | Copyright (c) 2021 Walkx
+You may not use this file except in compliance with the License. You may obtain a copy of the License [here](https://github.com/apurbagiri/homer-themed/blob/main/HOMER-THEME-LICENSE)
